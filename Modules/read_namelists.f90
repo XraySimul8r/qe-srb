@@ -1735,7 +1735,7 @@ MODULE read_namelists_module
        !
        ! ... declare modules
        !
-       USE io_global, ONLY : ionode, ionode_id
+       USE io_global, ONLY : ionode, ionode_id, stdout
        USE mp,        ONLY : mp_bcast
        USE mp_images, ONLY : intra_image_comm
 #ifdef __ENVIRON
@@ -1934,6 +1934,12 @@ MODULE read_namelists_module
        ios = 0
        IF( ionode ) THEN
           READ( unit_loc, srb, iostat = ios )
+! davegp
+          write(stdout,*)
+          write(stdout,*) ' This is the Shirley Reduced Basis version of QuantumESPRESSO'
+          write(stdout,*)
+          write(stdout,srb)
+! davegp
        END IF
        CALL mp_bcast( ios, ionode_id, intra_image_comm )
        IF( ios /= 0 ) THEN

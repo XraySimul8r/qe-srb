@@ -350,6 +350,7 @@ module srb_matrix
     use kinds, only : DP
     use mp_global, only : me_image, intra_pool_comm
     use mp, only : mp_sum
+    use io_global, only : stdout
     implicit none
     
     type(dmat) :: A
@@ -405,9 +406,14 @@ module srb_matrix
                  ztmp, 1, 1, tmp_desc, &
                  work, -1, rwork, -1, iwork, -1, &
                  ifail, iclustr, gap, ierr)
-    lwork = work(1); deallocate(work); allocate(work(lwork))
-    lrwork = rwork(1); deallocate(rwork); allocate(rwork(lrwork))
-    liwork = iwork(1); deallocate(iwork); allocate(iwork(liwork))
+! davegp
+! inserted some padding to avoid pzheevx errors related to work space
+    lwork = A%nprow*A%npcol*work(1); deallocate(work); allocate(work(lwork))
+    lrwork = A%nprow*A%npcol*rwork(1); deallocate(rwork); allocate(rwork(lrwork))
+    liwork = A%nprow*A%npcol*iwork(1); deallocate(iwork); allocate(iwork(liwork))
+    write(stdout,*) ' process grid = ', A%nprow, ' x ', A%npcol
+    write(stdout,*) ' pzheevx workspace allocation (MB) = ', dble((lwork*2+lrwork)*2+liwork)*4.d0/(1024.d0**2)
+! davegp
     CALL pzheevx('V', 'I', 'U', A%desc(3), &
                  A%dat, 1, 1, A%desc, &
                  0, 0, 1, num, &

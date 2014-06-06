@@ -69,6 +69,10 @@ SUBROUTINE print_ks_energies()
   CALL mp_bcast( ngk_g, root_bgrp, inter_bgrp_comm )
   !
   if (use_srb) then
+! davegp
+  write(stdout,*)
+  write(stdout,*) ' SRB: K_POINT (density) eigenvalues:'
+! davegp
   DO ik = 1, qpoints%nred
   !
      IF ( lsda ) THEN
@@ -98,7 +102,12 @@ SUBROUTINE print_ks_energies()
      END IF
      !
   END DO
-  else
+! davegp
+  write(stdout,*)
+  write(stdout,*) ' SRB: Q_POINT (basis) eigenvalues:'
+  endif
+! davegp
+!  else
   DO ik = 1, nkstot
   !
      IF ( lsda ) THEN
@@ -128,7 +137,7 @@ SUBROUTINE print_ks_energies()
      END IF
      !
   END DO
-  endif
+!  endif
   !
   DEALLOCATE ( ngk_g )
   !
