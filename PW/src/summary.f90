@@ -321,6 +321,10 @@ SUBROUTINE summary()
   ENDIF
 
   if (use_srb) then
+! davegp
+  write(stdout,*)
+  write(stdout,*) ' SRB: K_POINT information used to construct the density in the reduced basis'
+! davegp
   IF (lgauss) THEN
      WRITE( stdout, '(/5x,"number of k points=", i6, 2x, &
           &             a," smearing, width (Ry)=",f8.4)') &
@@ -358,7 +362,12 @@ SUBROUTINE summary()
              ik, (qpoints%xr (ipol,ik) , ipol = 1, 3) , qpoints%wr (ik)
      ENDDO
   ENDIF
-  else
+! davegp
+  write(stdout,*)
+  write(stdout,*) ' SRB: Q_POINT information used to construct the reduced basis from plane-waves'
+  endif
+! davegp
+! else
   IF (lgauss) THEN
      WRITE( stdout, '(/5x,"number of k points=", i6, 2x, &
           &             a," smearing, width (Ry)=",f8.4)') &
@@ -392,7 +401,7 @@ SUBROUTINE summary()
              ik, (xkg (ipol) , ipol = 1, 3) , wk (ik)
      ENDDO
   ENDIF
-  endif
+!  endif
 
 
   WRITE( stdout, '(/5x,"Dense  grid: ",i8," G-vectors", 5x, &
